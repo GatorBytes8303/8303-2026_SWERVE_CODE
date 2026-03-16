@@ -34,7 +34,7 @@ public final class Configs {
                     .feedForward.kV(drivingVelocityFeedForward);
 
             turningConfig
-                    .idleMode(IdleMode.kCoast)
+                    .idleMode(IdleMode.kBrake)
                     .smartCurrentLimit(20);
 
             turningConfig.absoluteEncoder

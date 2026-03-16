@@ -29,7 +29,7 @@ public class SuckerSlowCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_sucker.runSucker(ScorerConstants.kSuckerMotorSpeed * 0.90);
+    m_sucker.runSucker(ScorerConstants.kSuckerMotorSpeed * 0.70);
   }
 
   // Called once the command ends or is interrupted. Here we ensure the sucker is not
