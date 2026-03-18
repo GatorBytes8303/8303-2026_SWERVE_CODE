@@ -1,6 +1,6 @@
-# GatorBytes 2026 MaxSwerve Code 
+# GatorBytes 2026 MaxSwerve Code  
 
-Contains:
-MaxSwerve Drivetrain (Field Oriented with NavX)
-PhotonVision
-Intake/Extake
+Contains:  
+ MaxSwerve Drivetrain (Field Oriented with NavX)
+ PhotonVision
+ Intake/Extake
