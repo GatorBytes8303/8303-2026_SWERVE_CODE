@@ -110,4 +110,28 @@ public final class Constants {
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
   }
+  
+  public static final class VisionConstants {
+    // Camera names in PhotonVision.
+    public static final String kSpitterSideCameraName = "SpitterSideCamera";
+    public static final String kFuelCameraName = "FuelCamera";
+
+    // Hopper targeting.
+    public static final int kHopperTagId = 26;
+    public static final double kHopperCenterOffsetForwardMeters = -0.305;
+    public static final double kHopperCenterOffsetLeftMeters = 0.0;
+
+    // Spitter mount geometry in robot frame (+X forward, +Y left).
+    public static final double kSpitterOffsetForwardMeters = -0.2;
+    public static final double kSpitterOffsetLeftMeters = 0.2;
+    // Spitter axis direction in robot frame (+X forward, +Y left).
+    // This defines where the spitter points without using a fixed yaw offset.
+    public static final double kSpitterAxisForwardMeters = 0.35;
+    public static final double kSpitterAxisLeftMeters = 0.35;
+
+    public static double getSpitterAxisAngleDegrees() {
+      return Math.toDegrees(Math.atan2(kSpitterAxisLeftMeters, kSpitterAxisForwardMeters));
+    }
+
+  }
 }

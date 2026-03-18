@@ -3,15 +3,23 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+
+import org.littletonrobotics.urcl.URCL;
 import org.photonvision.PhotonCamera;
 
-import edu.wpi.first.wpilibj.TimedRobot;
+import com.pathplanner.lib.commands.FollowPathCommand;
 
+import edu.wpi.first.epilogue.Epilogue;
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.VisionConstants;
 
-// import edu.wpi.first.cscore.UsbCamera;
-// import edu.wpi.first.cameraserver.CameraServer;
+
 
 /**
  * The VM is configured tomk automatically run this class, and to call the functions corresponding to
@@ -21,9 +29,11 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
+  private Command m_visionCommand;
 
   private RobotContainer m_robotContainer;
-    PhotonCamera camera = new PhotonCamera("photonvision");
+  PhotonCamera camera = new PhotonCamera("photonvision");
+  PowerDistribution pdh = new PowerDistribution();
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -33,8 +43,15 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-    // frontCamera = CameraServer.startAutomaticCapture();
+   
     m_robotContainer = new RobotContainer();
+    CommandScheduler.getInstance().schedule(FollowPathCommand.warmupCommand());
+
+    // Initialize data logging.
+    DataLogManager.start();
+    URCL.start();
+
+
   }
 
   /**
@@ -51,7 +68,14 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+
+    SmartDashboard.putNumber("Voltage: ", pdh.getVoltage());
+    SmartDashboard.putNumber("Current Channel 10", pdh.getCurrent(10));
+    SmartDashboard.putNumber("Current Channel 12", pdh.getCurrent(12));
+    SmartDashboard.putNumber("Current Channel 14", pdh.getCurrent(14));
+    SmartDashboard.putNumber("Current Channel 16", pdh.getCurrent(16));
   }
+
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
@@ -62,7 +86,7 @@ public class Robot extends TimedRobot {
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
-  public void autonomousInit() {
+  public void autonomousInit(){
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     /*
@@ -95,7 +119,35 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    
+    // Read in relevant data from the Camera
+    boolean targetVisible = false;
+    double targetYaw = 0.0;
+    var results = camera.getAllUnreadResults();
+      if (!results.isEmpty()) {
+        // Camera processed a new frame since last
+        // Get the last one in the list.
+        var result = results.get(results.size() - 1);
+        if (result.hasTargets()) {
+        // At least one AprilTag was seen by the camera
+          for (var target : result.getTargets()) {
+            if (target.getFiducialId() == VisionConstants.kHopperTagId) {
+              // Found Tag 35, record its information
+              targetYaw = target.getYaw();
+              targetVisible = true;
+            }
+          }
+        }
+      }
+        // Put debug information to the dashboard
+        SmartDashboard.putBoolean("Vision Target Visible", targetVisible);
+
+        // schedule the autonomous command (example)
+    if (m_visionCommand != null) {
+      CommandScheduler.getInstance().schedule(m_visionCommand);
+    }
+  }
 
   @Override
   public void testInit() {

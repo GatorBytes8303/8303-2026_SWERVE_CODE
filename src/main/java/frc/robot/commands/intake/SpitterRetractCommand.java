@@ -2,24 +2,24 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.intake;
 
 import frc.robot.Constants.ScorerConstants;
-import frc.robot.subsystems.SuckerSubsystem;
+import frc.robot.subsystems.intake.SpitterSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
-/** An example command that uses an example subsystem. */
-public class SuckerSuckCommand extends Command {
-  private final SuckerSubsystem m_sucker;
+/** An SpitterCommand that uses a spitter subsystem. */
+public class SpitterRetractCommand extends Command {
+  private final SpitterSubsystem m_spitter;
 
   /**
-   * Runs the sucker
+   * Runs the Spitter down.
    *
-   * @param sucker The subsystem used by this command.
+   * @param spitter The subsystem used by this command.
    */
-  public SuckerSuckCommand(SuckerSubsystem sucker) {
-    m_sucker = sucker;
-    addRequirements(sucker);
+  public SpitterRetractCommand(SpitterSubsystem spitter) {
+    m_spitter = spitter;
+    addRequirements(spitter);
   }
 
   // Called when the command is initially scheduled.
@@ -29,14 +29,14 @@ public class SuckerSuckCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_sucker.runSucker(ScorerConstants.kSuckerMotorSpeed * -1);
+    m_spitter.runSpitter(ScorerConstants.kSpitterMotorSpeed * -1);
   }
 
-  // Called once the command ends or is interrupted. Here we ensure the sucker is not
+  // Called once the command ends or is interrupted.. Here we ensure the spitter is not
   // running once we let go of the button
   @Override
   public void end(boolean interrupted) {
-    m_sucker.runSucker(0);
+    m_spitter.runSpitter(0);
   }
 
   // Returns true when the command should end.
