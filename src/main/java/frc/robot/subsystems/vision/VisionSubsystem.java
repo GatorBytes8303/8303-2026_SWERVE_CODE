@@ -73,14 +73,14 @@ public class VisionSubsystem extends SubsystemBase {
   }
 
   public EstimatedRobotPose ifExistsGetEstimatedRobotPose(){
-    if (getVisionPoseEstimationResult().isPresent()){
+    if (getVisionPoseEstimationResult(getAllUnreadResults).isPresent()){
       return getVisionPoseEstimationResult().get();
     } 
     return null;
   }
 
   public PhotonTrackedTarget getBestTarget(){
-    return getLatestResult().getBestTarget();
+    return getAllUnreadResults().getBestTarget();
   }
 
   public Transform3d getCamToTarget(){
