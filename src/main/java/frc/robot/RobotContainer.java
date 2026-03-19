@@ -6,11 +6,11 @@ package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.intake.SpitterSubsystem;
 import frc.robot.subsystems.intake.SuckerSubsystem;
+import frc.robot.subsystems.vision.VisionSubsystem;
 import frc.robot.commands.intake.SpitterForwardCommand;
 import frc.robot.commands.intake.SpitterRetractCommand;
 import frc.robot.commands.intake.SuckerShootCommand;
@@ -31,6 +31,8 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   public final SuckerSubsystem m_sucker = new SuckerSubsystem();
   public final SpitterSubsystem m_spitter = new SpitterSubsystem();
+  public final VisionSubsystem m_vision = new VisionSubsystem();
+
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
 
@@ -69,6 +71,10 @@ public class RobotContainer {
         .onTrue(new InstantCommand(
             () -> m_robotDrive.zeroHeading(),
             m_robotDrive));
+
+    //
+        new JoystickButton(m_driverController, XboxController.Button.kA.value)
+    .whileTrue(new SpitterRetractCommand(m_spitter));  
     
     // Sucker and spitter controls
     // Right bumper shoots spitter and sucker, left bumper retracts spitter, Y button kicks into spitter and sucks slow
