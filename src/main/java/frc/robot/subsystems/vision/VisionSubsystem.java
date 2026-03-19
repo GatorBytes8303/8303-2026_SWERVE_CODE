@@ -5,24 +5,12 @@
 package frc.robot.subsystems.vision;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.VisionConstants;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
-import org.photonvision.PhotonPoseEstimator.PoseStrategy;
-import org.photonvision.targeting.PhotonPipelineResult;
-import org.photonvision.targeting.PhotonTrackedTarget;
 
 public class VisionSubsystem extends SubsystemBase {
   /** Creates a new VisionSubsystem. */
@@ -30,11 +18,7 @@ public class VisionSubsystem extends SubsystemBase {
   AprilTagFieldLayout aprilTagFieldLayout;
   PhotonPoseEstimator PoseEstimator;
 
-  public VisionSubsystem() {
-    PoseEstimator = new PhotonPoseEstimator(
-      aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, hopperCamera, VisionConstants.RobotToCam);
-  
-  }
+  public VisionSubsystem() {}
 
   @Override
   public void periodic() {
@@ -62,43 +46,6 @@ public class VisionSubsystem extends SubsystemBase {
         // Put debug information to the dashboard
         SmartDashboard.putBoolean("Vision Target Visible", targetVisible);
         SmartDashboard.putNumber("Vision Target Yaw", targetYaw);
-  }
-
-  public PhotonPipelineResult getAllUnreadResults(){
-    return hopperCamera.getAllUnreadResults();
-  }
-
-  public Optional<EstimatedRobotPose> getVisionPoseEstimationResult(PhotonPipelineResult results){
-    return PoseEstimator.update(results);
-  }
-
-  public EstimatedRobotPose ifExistsGetEstimatedRobotPose(){
-    if (getVisionPoseEstimationResult(getAllUnreadResults).isPresent()){
-      return getVisionPoseEstimationResult().get();
-    } 
-    return null;
-  }
-
-  public PhotonTrackedTarget getBestTarget(){
-    return getAllUnreadResults().getBestTarget();
-  }
-
-  public Transform3d getCamToTarget(){
-    return getBestTarget().getBestCameraToTarget();
-  }
-
-  //Returns list of IDs currently being tracked
-  public List<Integer> getAprilTagIDs(){
-    List<PhotonTrackedTarget> targets = getLatestResult().getTargets();
-    List<Integer> tagIDs = new ArrayList<>();
-    targets.forEach(target -> tagIDs.add(target.getFiducialId()));
-
-    return tagIDs;
-  }
-
-  //Returns true if an the ID is being tracked
-  public boolean containsID(Integer ID){
-    return getAprilTagIDs().contains(ID);
   }
 
 }

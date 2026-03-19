@@ -4,29 +4,28 @@
 
 package frc.robot;
 
-//import org.photonvision.PhotonCamera;
-import com.pathplanner.lib.commands.FollowPathCommand;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-//import frc.robot.Constants.VisionConstants;
-
+import org.photonvision.PhotonCamera;
+import com.pathplanner;
 
 
 /**
- * The VM is configured tomk automatically run this class, and to call the functions corresponding to
+ * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-
   private RobotContainer m_robotContainer;
-  //public PhotonCamera camera = new PhotonCamera("photonvision");
-  PowerDistribution pdh = new PowerDistribution();
+  public PhotonCamera hopperCamera = new PhotonCamera("Hopper Camera");
+  public PhotonCamera frontCamera = new PhotonCamera("Front Camera");
+  private PowerDistribution pdh = new PowerDistribution();
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -39,7 +38,6 @@ public class Robot extends TimedRobot {
    
     m_robotContainer = new RobotContainer();
     CommandScheduler.getInstance().schedule(FollowPathCommand.warmupCommand());
-
   }
 
   /**
@@ -107,35 +105,7 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {
-    
-    // Read in relevant data from the Camera
-    //boolean targetVisible = false;
-    //double targetYaw = 0.0;
-    //var results = camera.getAllUnreadResults();
-    //  if (!results.isEmpty()) {
-        // Camera processed a new frame since last
-        // Get the last one in the list.
-    //    var result = results.get(results.size() - 1);
-    //    if (result.hasTargets()) {
-        // At least one AprilTag was seen by the camera
-    //      for (var target : result.getTargets()) {
-    //        if (target.getFiducialId() == VisionConstants.kHopperTagId) {
-              // Found Tag 35, record its information
-    //          targetYaw = target.getYaw();
-    //          targetVisible = true;
-    //        }
-    //      }
-    //    }
-    //  }
-        // Put debug information to the dashboard
-      //  SmartDashboard.putBoolean("Vision Target Visible", targetVisible);
-
-        // schedule the autonomous command (example)
-    //if (m_visionCommand != null) {
-    //  CommandScheduler.getInstance().schedule(m_visionCommand);
-    //}
-  }
+  public void teleopPeriodic() {}
 
   @Override
   public void testInit() {
