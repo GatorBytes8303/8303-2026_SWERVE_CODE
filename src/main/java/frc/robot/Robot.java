@@ -4,14 +4,14 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.commands.FollowPathCommand;
+
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import org.photonvision.PhotonCamera;
-import com.pathplanner;
-
+import frc.robot.subsystems.vision.VisionSubsystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -22,9 +22,8 @@ import com.pathplanner;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
-  public PhotonCamera hopperCamera = new PhotonCamera("Hopper Camera");
-  public PhotonCamera frontCamera = new PhotonCamera("Front Camera");
-  private PowerDistribution pdh = new PowerDistribution();
+  private PowerDistribution m_pdh;
+  public VisionSubsystem m_vision;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -35,7 +34,8 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-   
+    m_pdh = new PowerDistribution();
+    m_vision = new VisionSubsystem();
     m_robotContainer = new RobotContainer();
     CommandScheduler.getInstance().schedule(FollowPathCommand.warmupCommand());
   }
@@ -55,11 +55,12 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
 
-    SmartDashboard.putNumber("Voltage: ", pdh.getVoltage());
-    SmartDashboard.putNumber("Current Channel 10", pdh.getCurrent(10));
-    SmartDashboard.putNumber("Current Channel 12", pdh.getCurrent(12));
-    SmartDashboard.putNumber("Current Channel 14", pdh.getCurrent(14));
-    SmartDashboard.putNumber("Current Channel 16", pdh.getCurrent(16));
+    SmartDashboard.putNumber("Voltage: ", m_pdh.getVoltage());
+    SmartDashboard.putNumber("Current Channel 10", m_pdh.getCurrent(10));
+    SmartDashboard.putNumber("Current Channel 12", m_pdh.getCurrent(12));
+    SmartDashboard.putNumber("Current Channel 14", m_pdh.getCurrent(14));
+    SmartDashboard.putNumber("Current Channel 16", m_pdh.getCurrent(16));
+    m_pdh.setSwitchableChannel(true);
   }
 
 

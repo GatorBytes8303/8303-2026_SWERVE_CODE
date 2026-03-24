@@ -8,13 +8,13 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.VisionConstants;
-
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 
 public class VisionSubsystem extends SubsystemBase {
   /** Creates a new VisionSubsystem. */
-  public PhotonCamera hopperCamera = new PhotonCamera("Hopper Camera");
+  public PhotonCamera hopperCamera = new PhotonCamera("8303_Cam_1_OV9281");
+  public PhotonCamera frontCamera = new PhotonCamera("8303_Cam_2_OV9281");
   AprilTagFieldLayout aprilTagFieldLayout;
   PhotonPoseEstimator PoseEstimator;
 

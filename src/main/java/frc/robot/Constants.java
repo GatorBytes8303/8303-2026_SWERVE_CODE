@@ -128,10 +128,5 @@ public final class Constants {
     // This defines where the spitter points without using a fixed yaw offset.
     public static final double kSpitterAxisForwardMeters = 0.35;
     public static final double kSpitterAxisLeftMeters = 0.35;
-
-    public static double getSpitterAxisAngleDegrees() {
-      return Math.toDegrees(Math.atan2(kSpitterAxisLeftMeters, kSpitterAxisForwardMeters));
-    }
-
   }
 }
