@@ -1,0 +1,10 @@
+{
+    "java.project.sourcePaths": [
+        "src",
+        "gradle",
+        "build",
+        ".wpilib",
+        ".gradle",
+        "vendordeps"
+    ]
+}
