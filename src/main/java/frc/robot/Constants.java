@@ -101,8 +101,8 @@ public final class Constants {
 
     public static final int kScorerMotorCurrentLimit = 50;
     public static final double kScorerMotorVolatageCompensation = 12;
-    public static final double kSpitterMotorSpeed = -1;
-    public static final double kSuckerMotorSpeed= 1;
+    public static final double kSpitterMotorSpeed = -1.00;
+    public static final double kSuckerMotorSpeed = 1.00;
     
     public static final int kSpitterMotorCanID = 20;
     public static final int kSuckerMotorCanID = 21; 

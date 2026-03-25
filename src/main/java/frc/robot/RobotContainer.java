@@ -15,6 +15,7 @@ import frc.robot.commands.intake.SpitterForwardCommand;
 import frc.robot.commands.intake.SpitterRetractCommand;
 import frc.robot.commands.intake.SuckerShootCommand;
 import frc.robot.commands.intake.SuckerSlowCommand;
+import frc.robot.commands.intake.SuckerRetractCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -92,6 +93,9 @@ public class RobotContainer {
 
         new JoystickButton(m_driverController, XboxController.Button.kY.value)
     .whileTrue(new SuckerSlowCommand(m_sucker));
+
+       new JoystickButton(m_driverController, XboxController.Button.kX.value)
+    .whileTrue(new SuckerRetractCommand(m_sucker));
 }
 
 
