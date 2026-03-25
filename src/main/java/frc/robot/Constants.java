@@ -4,10 +4,19 @@
 
 package frc.robot;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.math.Matrix;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -112,26 +121,24 @@ public final class Constants {
   }
   
   public static final class VisionConstants {
+    public static final AprilTagFieldLayout kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
     // Camera names in PhotonVision.
-    public static final String kSpitterSideCameraName = "SpitterSideCamera";
-    public static final String kFuelCameraName = "FuelCamera";
+    public static final String kHopperCameraName = "8303_Cam_1_OV9281";
+    public static final String kSpitterSideCameraName = "8303_Cam_2_OV9281";
 
-    // Hopper targeting.
-    public static final int kHopperTagId = 26;
-    public static final double kHopperCenterOffsetForwardMeters = -0.305;
-    public static final double kHopperCenterOffsetLeftMeters = 0.0;
+    // Outpost targeting.
+    public static final int kBlueLeftHopperTagId = 26;
+    public static final int kBlueRightHopperTagId = 27;
+    public static final int kRedLeftHopperTagId = 10;
+    public static final int kRedRightHopperTagId = 9;
+    
+    // The transform from the robot's center to the camera lens. Units are in meters and radians.
+    public static final Transform3d kRobotToCam =
+    new Transform3d(new Translation3d(-0.5, 0.0, -0.5), new Rotation3d(0, 0, 0));
 
-    // Spitter mount geometry in robot frame (+X forward, +Y left).
-    public static final double kSpitterOffsetForwardMeters = -0.2;
-    public static final double kSpitterOffsetLeftMeters = 0.2;
-    // Spitter axis direction in robot frame (+X forward, +Y left).
-    // This defines where the spitter points without using a fixed yaw offset.
-    public static final double kSpitterAxisForwardMeters = 0.35;
-    public static final double kSpitterAxisLeftMeters = 0.35;
-
-    public static double getSpitterAxisAngleDegrees() {
-      return Math.toDegrees(Math.atan2(kSpitterAxisLeftMeters, kSpitterAxisForwardMeters));
-    }
-
+    // The standard deviations of our vision estimated poses, which affect correction rate
+    // (Fake values. Experiment and determine estimation noise on an actual robot.)
+    public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(0, 0, 0);
+    public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0, 0, 0);
   }
 }

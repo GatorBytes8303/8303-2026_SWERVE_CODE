@@ -5,16 +5,20 @@
 package frc.robot.commands.drive;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class VisionAimCommand extends Command {
   private final VisionSubsystem m_vision;
+  private final DriveSubsystem m_drive;
 
   /** Creates a new VisionAim. */
-  public VisionAimCommand(VisionSubsystem vision) {
+  public VisionAimCommand(DriveSubsystem drive, VisionSubsystem vision) {
     // Use addRequirements() here to declare subsystem dependencies.
+    m_drive = drive;
     m_vision = vision;
+    addRequirements(drive);
     addRequirements(vision);
   }
 

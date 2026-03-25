@@ -11,6 +11,7 @@ import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.intake.SpitterSubsystem;
 import frc.robot.subsystems.intake.SuckerSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
+import frc.robot.commands.drive.VisionAimCommand;
 import frc.robot.commands.intake.SpitterForwardCommand;
 import frc.robot.commands.intake.SpitterRetractCommand;
 import frc.robot.commands.intake.SuckerShootCommand;
@@ -72,7 +73,7 @@ public class RobotContainer {
             () -> m_robotDrive.zeroHeading(),
             m_robotDrive));
 
-    //
+    // Spit from intake if jamed on A pressed
         new JoystickButton(m_driverController, XboxController.Button.kA.value)
     .whileTrue(new SpitterRetractCommand(m_spitter));  
     
@@ -92,6 +93,10 @@ public class RobotContainer {
 
         new JoystickButton(m_driverController, XboxController.Button.kY.value)
     .whileTrue(new SuckerSlowCommand(m_sucker));
+
+    // Test Vision aim at target when X is held
+      new JoystickButton(m_driverController, XboxController.Button.kX.value)
+    .whileTrue(new VisionAimCommand(m_robotDrive, m_vision));
 }
 
 
