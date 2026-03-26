@@ -17,6 +17,7 @@ public class VisionSubsystem extends SubsystemBase {
   public PhotonCamera frontCamera = new PhotonCamera("8303_Cam_2_OV9281");
   AprilTagFieldLayout aprilTagFieldLayout;
   PhotonPoseEstimator PoseEstimator;
+  private double yaw;
 
   public VisionSubsystem() {}
 
@@ -39,13 +40,16 @@ public class VisionSubsystem extends SubsystemBase {
               // Found Tag 35, record its information
               targetYaw = target.getYaw();
               targetVisible = true;
+              this.yaw = targetYaw;
             }
           }
         }
+        SmartDashboard.putBoolean("Target Visible", targetVisible);
+        SmartDashboard.putNumber("Target Yaw", this.yaw);
       }
-        // Put debug information to the dashboard
-        SmartDashboard.putBoolean("Vision Target Visible", targetVisible);
-        SmartDashboard.putNumber("Vision Target Yaw", targetYaw);
   }
-
+  
+  public double getTargetYaw() {
+    return this.yaw;
+  }
 }

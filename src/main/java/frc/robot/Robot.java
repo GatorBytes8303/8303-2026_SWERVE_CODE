@@ -6,9 +6,7 @@ package frc.robot;
 
 import com.pathplanner.lib.commands.FollowPathCommand;
 
-import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.vision.VisionSubsystem;
@@ -21,8 +19,8 @@ import frc.robot.subsystems.vision.VisionSubsystem;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
+  @SuppressWarnings("unused")
   private RobotContainer m_robotContainer;
-  private PowerDistribution m_pdh;
   public VisionSubsystem m_vision;
 
   /**
@@ -34,7 +32,6 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-    m_pdh = new PowerDistribution();
     m_vision = new VisionSubsystem();
     m_robotContainer = new RobotContainer();
     CommandScheduler.getInstance().schedule(FollowPathCommand.warmupCommand());
@@ -54,13 +51,6 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-
-    SmartDashboard.putNumber("Voltage: ", m_pdh.getVoltage());
-    SmartDashboard.putNumber("Current Channel 10", m_pdh.getCurrent(10));
-    SmartDashboard.putNumber("Current Channel 12", m_pdh.getCurrent(12));
-    SmartDashboard.putNumber("Current Channel 14", m_pdh.getCurrent(14));
-    SmartDashboard.putNumber("Current Channel 16", m_pdh.getCurrent(16));
-    m_pdh.setSwitchableChannel(true);
   }
 
 
