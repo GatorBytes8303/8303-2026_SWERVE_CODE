@@ -51,9 +51,9 @@ public class VisionAimCommand extends Command {
     (0, or directly facing the target).
     */
     m_robotDrive.drive(
-        m_vision.getTargetRange() - VisionConstants.kHubTagDistanceMeters,
+        m_vision.getDesiredCameraToTargetDistance() * VisionConstants.kVisionSpeedReductionFactor,
         0,
-        m_vision.getTargetYaw(),
+        m_vision.getTargetYaw() * VisionConstants.kVisionSpeedReductionFactor,
         DriveConstants.kFieldOrientedDrive);
   }
 

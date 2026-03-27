@@ -141,6 +141,7 @@ public final class Constants {
     public static final int kBlueHubTagId = 26;
     public static final double kHubTagHeightMeters = 0.5;
     public static final double kHubTagDistanceMeters = 1.0;
+    public static final double kVisionSpeedReductionFactor = 0.5;
 
     // Camera mount geometry in robot frame.
     public static final double kHopperCameraHeightMeters = 0.5;

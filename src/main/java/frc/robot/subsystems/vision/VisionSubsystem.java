@@ -79,9 +79,12 @@ public class VisionSubsystem extends SubsystemBase {
           }
         }
         // Publish data to SmartDashboard for debugging purposes.
+        SmartDashboard.putString("Alliance", isRed ? "Red" : "Blue");
+        SmartDashboard.putNumber("Target Tracking", isRed ? VisionConstants.kRedHubTagId : VisionConstants.kBlueHubTagId);
         SmartDashboard.putBoolean("Target Visible", targetVisible);
         SmartDashboard.putNumber("Target Yaw", this.yaw);
         SmartDashboard.putNumber("Target Range", this.range);
+        SmartDashboard.putNumber("Desired Camera to Target Distance", getDesiredCameraToTargetDistance());
       }
   }
   
@@ -91,5 +94,9 @@ public class VisionSubsystem extends SubsystemBase {
   
   public double getTargetRange() {
     return this.range;
+  }
+
+  public double getDesiredCameraToTargetDistance() {
+    return getTargetRange() - VisionConstants.kHubTagDistanceMeters;
   }
 }
