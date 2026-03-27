@@ -9,7 +9,7 @@ import frc.robot.subsystems.intake.SpitterSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An SpitterCommand that uses a spitter subsystem. */
-public class SpitterRetractCommand extends Command {
+public class SpitterReverseCommand extends Command {
   private final SpitterSubsystem m_spitter;
 
   /**
@@ -17,7 +17,7 @@ public class SpitterRetractCommand extends Command {
    *
    * @param spitter The subsystem used by this command.
    */
-  public SpitterRetractCommand(SpitterSubsystem spitter) {
+  public SpitterReverseCommand(SpitterSubsystem spitter) {
     m_spitter = spitter;
     addRequirements(spitter);
   }
@@ -29,10 +29,10 @@ public class SpitterRetractCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_spitter.runSpitter(ScorerConstants.kSpitterMotorSpeed * -1);
+    m_spitter.runSpitter(ScorerConstants.kSpitterReversedSpeed);
   }
 
-  // Called once the command ends or is interrupted.. Here we ensure the spitter is not
+  // Called once the command ends or is interrupted. Here we ensure the spitter is not
   // running once we let go of the button
   @Override
   public void end(boolean interrupted) {

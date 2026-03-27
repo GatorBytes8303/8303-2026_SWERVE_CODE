@@ -9,7 +9,7 @@ import frc.robot.subsystems.intake.SuckerSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
-public class SuckerSuckCommand extends Command {
+public class SuckerReverseCommand extends Command {
   private final SuckerSubsystem m_sucker;
 
   /**
@@ -17,7 +17,7 @@ public class SuckerSuckCommand extends Command {
    *
    * @param sucker The subsystem used by this command.
    */
-  public SuckerSuckCommand(SuckerSubsystem sucker) {
+  public SuckerReverseCommand(SuckerSubsystem sucker) {
     m_sucker = sucker;
     addRequirements(sucker);
   }
@@ -29,7 +29,7 @@ public class SuckerSuckCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_sucker.runSucker(ScorerConstants.kSuckerMotorSpeed * -1);
+    m_sucker.runSucker(ScorerConstants.kSuckerReversedSpeed);
   }
 
   // Called once the command ends or is interrupted. Here we ensure the sucker is not

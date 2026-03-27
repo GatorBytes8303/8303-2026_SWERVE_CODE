@@ -12,10 +12,11 @@ import frc.robot.subsystems.intake.SpitterSubsystem;
 import frc.robot.subsystems.intake.SuckerSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
 import frc.robot.commands.intake.SpitterForwardCommand;
-import frc.robot.commands.intake.SpitterRetractCommand;
-import frc.robot.commands.intake.SuckerShootCommand;
+import frc.robot.commands.intake.SpitterReverseCommand;
+import frc.robot.commands.intake.SuckerForwardCommand;
 import frc.robot.commands.intake.SuckerSlowCommand;
-import frc.robot.commands.intake.SuckerRetractCommand;
+import frc.robot.commands.intake.SuckerReverseCommand;
+import frc.robot.commands.drive.VisionAimCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -53,7 +54,7 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
-                false),
+                Constants.DriveConstants.kFieldOrientedDrive),
             m_robotDrive));
   }
 
@@ -73,29 +74,36 @@ public class RobotContainer {
             () -> m_robotDrive.zeroHeading(),
             m_robotDrive));
 
-    //
+    // UnJam the spitter with the A button
         new JoystickButton(m_driverController, XboxController.Button.kA.value)
-    .whileTrue(new SpitterRetractCommand(m_spitter));  
+    .whileTrue(new SpitterReverseCommand(m_spitter));  
     
     // Sucker and spitter controls
-    // Right bumper shoots spitter and sucker, left bumper retracts spitter, Y button kicks into spitter and sucks slow
+    // Right bumper shoots spitter and sucker
     new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
-    .whileTrue(new SuckerShootCommand(m_sucker));
+    .whileTrue(new SuckerForwardCommand(m_sucker));
     
     new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
     .whileTrue(new SpitterForwardCommand(m_spitter));
-
+    
+    // Left bumper retracts spitter
     new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value)
-    .whileTrue(new SpitterRetractCommand(m_spitter));
+    .whileTrue(new SpitterReverseCommand(m_spitter));
 
         new JoystickButton(m_driverController, XboxController.Button.kY.value)
-    .whileTrue(new SpitterRetractCommand(m_spitter));
-
+    .whileTrue(new SpitterReverseCommand(m_spitter));
+    
+    // Y button kicks into spitter and sucks slow
         new JoystickButton(m_driverController, XboxController.Button.kY.value)
     .whileTrue(new SuckerSlowCommand(m_sucker));
 
+    // X button UnJams sucker
        new JoystickButton(m_driverController, XboxController.Button.kX.value)
-    .whileTrue(new SuckerRetractCommand(m_sucker));
+    .whileTrue(new SuckerReverseCommand(m_sucker));
+
+    // B button sets the robot to aiming position in reference the target using vision
+    new JoystickButton(m_driverController, XboxController.Button.kB.value)
+    .whileTrue(new VisionAimCommand(m_vision, m_robotDrive));
 }
 
 

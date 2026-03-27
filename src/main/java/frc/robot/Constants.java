@@ -57,7 +57,11 @@ public final class Constants {
     public static final int kFrontRightTurningCanId = 14;
     public static final int kRearRightTurningCanId = 16;
 
+    // Whether the gyro is upside down.
     public static final boolean kGyroReversed = false;
+
+    // Whether the drive should be field-oriented or robot-oriented.
+    public static final boolean kFieldOrientedDrive = false;
   }
 
   public static final class ModuleConstants {
@@ -70,6 +74,7 @@ public final class Constants {
     public static final double kDrivingMotorFreeSpeedRps = NeoMotorConstants.kFreeSpeedRpm / 60;
     public static final double kWheelDiameterMeters = 0.0762;
     public static final double kWheelCircumferenceMeters = kWheelDiameterMeters * Math.PI;
+
     // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15
     // teeth on the bevel pinion
     public static final double kDrivingMotorReduction = (45.0 * 22) / (kDrivingMotorPinionTeeth * 15);
@@ -78,16 +83,19 @@ public final class Constants {
   }
 
   public static final class OIConstants {
+    // Driver controller configuration
     public static final int kDriverControllerPort = 0;
     public static final double kDriveDeadband = 0.05;
   }
 
   public static final class AutoConstants {
+    // These are example values for autonomous driving.
     public static final double kMaxSpeedMetersPerSecond = 3;
     public static final double kMaxAccelerationMetersPerSecondSquared = 3;
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
 
+    // PID controller values for autonomous driving and turning
     public static final double kPXController = 1;
     public static final double kPYController = 1;
     public static final double kPThetaController = 1;
@@ -97,36 +105,45 @@ public final class Constants {
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
   }
 
-  public static final class ScorerConstants {
+  public static final class NeoMotorConstants {
+    // The free speed of the NEO motor in RPM.
+    public static final double kFreeSpeedRpm = 5676;
+  }
 
+  public static final class ScorerConstants {
+    // Motor configuration for the spitter and sucker
+    // Spitter is the mechanism that shoots fuel into the hub, 
+    // and the sucker is the intake 
+
+    // Sets constants for the spitter and sucker motors.
     public static final int kScorerMotorCurrentLimit = 50;
     public static final double kScorerMotorVolatageCompensation = 12;
+
+    // Spitter is reversed because of the way the motor is mounted on the robot
+    // Sucker is not reversed
     public static final double kSpitterMotorSpeed = -1.00;
     public static final double kSuckerMotorSpeed = 1.00;
+    public static final double kSpitterReversedSpeed = 1.00;
+    public static final double kSuckerReversedSpeed = -1.00;
     
+    // CAN IDs for the spitter and sucker motors
     public static final int kSpitterMotorCanID = 20;
     public static final int kSuckerMotorCanID = 21; 
-  }
-  public static final class NeoMotorConstants {
-    public static final double kFreeSpeedRpm = 5676;
   }
   
   public static final class VisionConstants {
     // Camera names in PhotonVision.
-    public static final String kSpitterSideCameraName = "SpitterSideCamera";
-    public static final String kFuelCameraName = "FuelCamera";
+    public static final String kHopperCameraName = "8303_Cam_1_OV9281";
+    public static final String kFuelCameraName = "8303_Cam_2_OV9281";
 
-    // Hopper targeting.
-    public static final int kHopperTagId = 26;
-    public static final double kHopperCenterOffsetForwardMeters = -0.305;
-    public static final double kHopperCenterOffsetLeftMeters = 0.0;
+    // Hub targeting, color dependent, contains desired CameraToTag distance.
+    public static final int kRedHubTagId = 10;
+    public static final int kBlueHubTagId = 26;
+    public static final double kHubTagHeightMeters = 0.5;
+    public static final double kHubTagDistanceMeters = 1.0;
 
-    // Spitter mount geometry in robot frame (+X forward, +Y left).
-    public static final double kSpitterOffsetForwardMeters = -0.2;
-    public static final double kSpitterOffsetLeftMeters = 0.2;
-    // Spitter axis direction in robot frame (+X forward, +Y left).
-    // This defines where the spitter points without using a fixed yaw offset.
-    public static final double kSpitterAxisForwardMeters = 0.35;
-    public static final double kSpitterAxisLeftMeters = 0.35;
+    // Camera mount geometry in robot frame.
+    public static final double kHopperCameraHeightMeters = 0.5;
+    public static final double kHopperCameraPitchDegrees = 50;
   }
 }

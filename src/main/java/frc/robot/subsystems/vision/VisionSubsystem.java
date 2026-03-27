@@ -5,29 +5,55 @@
 package frc.robot.subsystems.vision;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.math.util.Units;
+
 import frc.robot.Constants.VisionConstants;
+
+import java.util.Optional;
+
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonUtils;
 
 public class VisionSubsystem extends SubsystemBase {
   /** Creates a new VisionSubsystem. */
-  public PhotonCamera hopperCamera = new PhotonCamera("8303_Cam_1_OV9281");
-  public PhotonCamera frontCamera = new PhotonCamera("8303_Cam_2_OV9281");
+  public PhotonCamera hopperCamera = new PhotonCamera(VisionConstants.kHopperCameraName);
+  public PhotonCamera frontCamera = new PhotonCamera(VisionConstants.kFuelCameraName);
   AprilTagFieldLayout aprilTagFieldLayout;
   PhotonPoseEstimator PoseEstimator;
   private double yaw;
+  private double range;
+  private boolean isColorPresented = false;
+  private boolean isRed = false;
 
   public VisionSubsystem() {}
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-        // Read in relevant data from the Camera
+    // Read in relevant data from the Camera
+    // We will use the hopper camera to determine the alliance color and calculate yaw and range to the hub.
     boolean targetVisible = false;
     double targetYaw = 0.0;
+    double targetRange = 0.0;
     var results = hopperCamera.getAllUnreadResults();
+
+    // If the alliance color is not yet determined, attempt to determine it using the DriverStation API.
+    Optional<Alliance> ally = DriverStation.getAlliance();
+    if (ally.isPresent() && !isColorPresented) {
+      if (ally.get() == Alliance.Red) {
+        isColorPresented = true;
+        isRed = true;
+      }
+      else if (ally.get() == Alliance.Blue) {
+        isColorPresented = true;
+        isRed = false;
+      }
+    }
 
       if (!results.isEmpty()) {
         // Camera processed a new frame since last
@@ -36,20 +62,34 @@ public class VisionSubsystem extends SubsystemBase {
         if (result.hasTargets()) {
         // At least one AprilTag was seen by the camera
           for (var target : result.getTargets()) {
-            if (target.getFiducialId() == VisionConstants.kHopperTagId) {
-              // Found Tag 35, record its information
+            // Check if the target is the correct color's hub tag.
+            if (isRed ? target.getFiducialId() == VisionConstants.kRedHubTagId : target.getFiducialId() == VisionConstants.kBlueHubTagId) {
+              // This is the correct target, so we can use it to calculate yaw and range.
               targetYaw = target.getYaw();
               targetVisible = true;
               this.yaw = targetYaw;
+              targetRange =
+                PhotonUtils.calculateDistanceToTargetMeters(
+                  VisionConstants.kHopperCameraHeightMeters, 
+                  VisionConstants.kHubTagHeightMeters, 
+                  Units.degreesToRadians(VisionConstants.kHopperCameraPitchDegrees), 
+                  Units.degreesToRadians(target.getPitch()));
+              this.range = targetRange;
             }
           }
         }
+        // Publish data to SmartDashboard for debugging purposes.
         SmartDashboard.putBoolean("Target Visible", targetVisible);
         SmartDashboard.putNumber("Target Yaw", this.yaw);
+        SmartDashboard.putNumber("Target Range", this.range);
       }
   }
   
   public double getTargetYaw() {
     return this.yaw;
+  }
+  
+  public double getTargetRange() {
+    return this.range;
   }
 }

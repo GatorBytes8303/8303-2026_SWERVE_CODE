@@ -32,7 +32,7 @@ public class SpitterForwardCommand extends Command {
     m_spitter.runSpitter(ScorerConstants.kSpitterMotorSpeed);
   }
 
-  // Called once the command ends or is interrupted.. Here we ensure the spitter is not
+  // Called once the command ends or is interrupted. Here we ensure the spitter is not
   // running once we let go of the button
   @Override
   public void end(boolean interrupted) {
