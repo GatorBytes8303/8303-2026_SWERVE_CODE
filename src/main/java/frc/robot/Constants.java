@@ -129,6 +129,8 @@ public final class Constants {
     // CAN IDs for the spitter and sucker motors
     public static final int kSpitterMotorCanID = 20;
     public static final int kSuckerMotorCanID = 21; 
+
+    public static final double kScorerDelay = 0.5;
   }
   
   public static final class VisionConstants {
@@ -139,12 +141,13 @@ public final class Constants {
     // Hub targeting, color dependent, contains desired CameraToTag distance.
     public static final int kRedHubTagId = 10;
     public static final int kBlueHubTagId = 26;
-    public static final double kHubTagHeightMeters = 0.5;
-    public static final double kHubTagDistanceMeters = 1.0;
+    public static final double kHubTagHeightInches = 44.25;
+    public static final double kHubTagDistanceInches = 150;                                                                                                                                     
+
     public static final double kVisionSpeedReductionFactor = 0.5;
 
     // Camera mount geometry in robot frame.
-    public static final double kHopperCameraHeightMeters = 0.5;
-    public static final double kHopperCameraPitchDegrees = 50;
+    public static final double kHopperCameraHeightInches = 8.25;
+    public static final double kHopperCameraPitchDegrees = 15;
   }
 }
