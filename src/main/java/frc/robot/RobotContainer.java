@@ -48,16 +48,16 @@ public class RobotContainer {
     configureButtonBindings();
 
     // Configure default commands
-  //  m_robotDrive.setDefaultCommand(
+    m_robotDrive.setDefaultCommand(
         // The left stick controls translation of the robot.
         // Turning is controlled by the X axis of the right stick.
-       // new RunCommand(
-          //  () -> m_robotDrive.drive(
-         //       -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-          //      -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-          //      -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
-          //      Constants.DriveConstants.kFieldOrientedDrive),
-          //  m_robotDrive));
+          new RunCommand(
+            () -> m_robotDrive.drive(
+                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+                Constants.DriveConstants.kFieldOrientedDrive),
+            m_robotDrive));
   }
 
   /**
