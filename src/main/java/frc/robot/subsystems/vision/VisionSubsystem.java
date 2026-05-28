@@ -27,6 +27,8 @@ public class VisionSubsystem extends SubsystemBase {
   PhotonPoseEstimator PoseEstimator;
   private double yaw;
   private double range;
+  private double desiredRange;
+  private boolean visible;
   private boolean isColorPresented = false;
   private boolean isRed = false;
 
@@ -41,6 +43,11 @@ public class VisionSubsystem extends SubsystemBase {
     double targetYaw = 0.0;
     double targetRange = 0.0;
     var results = hopperCamera.getAllUnreadResults();
+    double desiredRange = 0.0;
+    this.yaw = 0;
+    this.range = 0;
+    this.desiredRange = 0;
+    this.visible = false;
 
     // If the alliance color is not yet determined, attempt to determine it using the DriverStation API.
     Optional<Alliance> ally = DriverStation.getAlliance();
@@ -55,28 +62,32 @@ public class VisionSubsystem extends SubsystemBase {
       }
     }
 
-      if (!results.isEmpty()) {
-        // Camera processed a new frame since last
-        // Get the last one in the list.
-        var result = results.get(results.size() - 1);
-        if (result.hasTargets()) {
+    if (!results.isEmpty()) {
+    // Camera processed a new frame since last
+    // Get the last one in the list.
+      var result = results.get(results.size() - 1);
+      if (result.hasTargets()) {
         // At least one AprilTag was seen by the camera
-          for (var target : result.getTargets()) {
-            // Check if the target is the correct color's hub tag.
-            if (isRed ? target.getFiducialId() == VisionConstants.kRedHubTagId : target.getFiducialId() == VisionConstants.kBlueHubTagId) {
-              // This is the correct target, so we can use it to calculate yaw and range.
-              targetYaw = target.getYaw();
-              targetVisible = true;
-              this.yaw = targetYaw;
-              targetRange =
-                PhotonUtils.calculateDistanceToTargetMeters(
-                  VisionConstants.kHopperCameraHeightMeters, 
-                  VisionConstants.kHubTagHeightMeters, 
-                  Units.degreesToRadians(VisionConstants.kHopperCameraPitchDegrees), 
-                  Units.degreesToRadians(target.getPitch()));
+        for (var target : result.getTargets()) {
+          // Check if the target is the correct color's hub tag.
+          if (isRed ? target.getFiducialId() == VisionConstants.kRedHubTagId : target.getFiducialId() == VisionConstants.kBlueHubTagId) {
+            // This is the correct target, so we can use it to calculate yaw and range.
+            targetYaw = target.getYaw();
+            targetVisible = true;
+            this.yaw = targetYaw;
+            targetRange =
+              PhotonUtils.calculateDistanceToTargetMeters(
+                VisionConstants.kHopperCameraHeightInches, 
+                VisionConstants.kHubTagHeightInches, 
+                Units.degreesToRadians(VisionConstants.kHopperCameraPitchDegrees), 
+                Units.degreesToRadians(target.getPitch()));
               this.range = targetRange;
+              this.visible = targetVisible;
+              this.desiredRange = getDesiredCameraToTargetDistance();
             }
           }
+        } else {
+         this.visible = targetVisible;
         }
         // Publish data to SmartDashboard for debugging purposes.
         SmartDashboard.putString("Alliance", isRed ? "Red" : "Blue");
@@ -97,6 +108,11 @@ public class VisionSubsystem extends SubsystemBase {
   }
 
   public double getDesiredCameraToTargetDistance() {
-    return getTargetRange() - VisionConstants.kHubTagDistanceMeters;
+    if (visible == true){
+          desiredRange = getTargetRange() - VisionConstants.kHubTagDistanceInches;
+    } else {
+    desiredRange = 0;
+    }
+    return desiredRange;
   }
 }

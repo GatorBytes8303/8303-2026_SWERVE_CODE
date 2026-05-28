@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.ScorerConstants;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.intake.SpitterSubsystem;
 import frc.robot.subsystems.intake.SuckerSubsystem;
@@ -18,6 +19,7 @@ import frc.robot.commands.intake.SuckerSlowCommand;
 import frc.robot.commands.intake.SuckerReverseCommand;
 import frc.robot.commands.drive.VisionAimCommand;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -46,16 +48,16 @@ public class RobotContainer {
     configureButtonBindings();
 
     // Configure default commands
-    m_robotDrive.setDefaultCommand(
+  //  m_robotDrive.setDefaultCommand(
         // The left stick controls translation of the robot.
         // Turning is controlled by the X axis of the right stick.
-        new RunCommand(
-            () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
-                Constants.DriveConstants.kFieldOrientedDrive),
-            m_robotDrive));
+       // new RunCommand(
+          //  () -> m_robotDrive.drive(
+         //       -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
+          //      -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+          //      -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+          //      Constants.DriveConstants.kFieldOrientedDrive),
+          //  m_robotDrive));
   }
 
   /**
@@ -84,7 +86,12 @@ public class RobotContainer {
     .whileTrue(new SuckerForwardCommand(m_sucker));
     
     new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
-    .whileTrue(new SpitterForwardCommand(m_spitter));
+    .whileTrue(
+      Commands.sequence(
+        Commands.waitSeconds(ScorerConstants.kScorerDelay), 
+        new SpitterForwardCommand(m_spitter)
+      )
+    );
     
     // Left bumper retracts spitter
     new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value)
