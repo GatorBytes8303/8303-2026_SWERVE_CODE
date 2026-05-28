@@ -2,14 +2,14 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.intake;
 
 import frc.robot.Constants.ScorerConstants;
-import frc.robot.subsystems.SuckerSubsystem;
+import frc.robot.subsystems.intake.SuckerSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
-public class SuckerSuckCommand extends Command {
+public class SuckerForwardCommand extends Command {
   private final SuckerSubsystem m_sucker;
 
   /**
@@ -17,7 +17,7 @@ public class SuckerSuckCommand extends Command {
    *
    * @param sucker The subsystem used by this command.
    */
-  public SuckerSuckCommand(SuckerSubsystem sucker) {
+  public SuckerForwardCommand(SuckerSubsystem sucker) {
     m_sucker = sucker;
     addRequirements(sucker);
   }
@@ -29,7 +29,7 @@ public class SuckerSuckCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_sucker.runSucker(ScorerConstants.kSuckerMotorSpeed * -1);
+    m_sucker.runSucker(ScorerConstants.kSuckerMotorSpeed);
   }
 
   // Called once the command ends or is interrupted. Here we ensure the sucker is not

@@ -2,10 +2,10 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.intake;
 
 import frc.robot.Constants.ScorerConstants;
-import frc.robot.subsystems.SpitterSubsystem;
+import frc.robot.subsystems.intake.SpitterSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An SpitterCommand that uses a spitter subsystem. */
@@ -32,7 +32,7 @@ public class SpitterForwardCommand extends Command {
     m_spitter.runSpitter(ScorerConstants.kSpitterMotorSpeed);
   }
 
-  // Called once the command ends or is interrupted.. Here we ensure the spitter is not
+  // Called once the command ends or is interrupted. Here we ensure the spitter is not
   // running once we let go of the button
   @Override
   public void end(boolean interrupted) {

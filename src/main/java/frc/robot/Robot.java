@@ -3,26 +3,26 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-import org.photonvision.PhotonCamera;
 
-import edu.wpi.first.wpilibj.TimedRobot; 
+import com.pathplanner.lib.commands.FollowPathCommand;
+
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-
-// import edu.wpi.first.cscore.UsbCamera;
-// import edu.wpi.first.cameraserver.CameraServer;
+import frc.robot.subsystems.vision.VisionSubsystem;
 
 /**
- * The VM is configured tomk automatically run this class, and to call the functions corresponding to
+ * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-
+  @SuppressWarnings("unused")
   private RobotContainer m_robotContainer;
-    PhotonCamera camera = new PhotonCamera("photonvision");
+  public VisionSubsystem m_vision;
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -32,8 +32,10 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-    // frontCamera = CameraServer.startAutomaticCapture();
+    
+    m_vision = new VisionSubsystem();
     m_robotContainer = new RobotContainer();
+    CommandScheduler.getInstance().schedule(FollowPathCommand.warmupCommand());
   }
 
   /**
@@ -52,6 +54,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
   }
 
+
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {}
@@ -61,8 +64,8 @@ public class Robot extends TimedRobot {
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
-  public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+  public void autonomousInit(){
+    //m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",
@@ -72,9 +75,9 @@ public class Robot extends TimedRobot {
      */
 
     // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      CommandScheduler.getInstance().schedule(m_autonomousCommand);
-    }
+    //if (m_autonomousCommand != null) {
+    //  CommandScheduler.getInstance().schedule(m_autonomousCommand);
+    //}
   }
 
   /** This function is called periodically during autonomous. */
